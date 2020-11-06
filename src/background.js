@@ -143,7 +143,8 @@ async function enroll(isTreatmentBranch) {
   });
 
   // If we're enrolled in the study, set everything up, and then we're done.
-  let study = await browser.normandyAddonStudy.getStudy();
+  let study = browser.normandyAddonStudy &&
+    await browser.normandyAddonStudy.getStudy();
   if (study) {
     // Sanity check the study.  This conditional should always be true.
     if (study.active && Object.values(BRANCHES).includes(study.branch)) {
@@ -159,6 +160,8 @@ async function enroll(isTreatmentBranch) {
     if (isTemporaryInstall) {
       console.debug("isTemporaryInstall");
       await enroll(true);
+    } else {
+      testProvider = new ProviderDynamicQuickSuggest();
     }
     sendTestMessage("ready");
   });
