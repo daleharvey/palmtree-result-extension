@@ -55,7 +55,21 @@
             "description": "Search term to match"
           }
         ]
+      },
+      {
+        "name": "insertStyleSheet",
+        "type": "function",
+        "async": true,
+        "description": "Insert a stylesheet.",
+        "parameters": [
+          {
+            "name": "styleSheetURL",
+            "type": "string",
+            "description": "path to the stylesheet"
+          }
+        ]
       }
+
     ]
   }
 ]

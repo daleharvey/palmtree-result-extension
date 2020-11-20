@@ -1,0 +1,7 @@
+.urlbarView-row:is([sponsored]) > .urlbarView-row-inner > .urlbarView-url {
+  visibility: collapse !important;
+}
+
+.urlbarView-row:is([type=remotetab], [sponsored]):is([selected], :hover) > .urlbarView-row-inner > .urlbarView-no-wrap > .urlbarView-action {
+  display: flex !important;
+}
