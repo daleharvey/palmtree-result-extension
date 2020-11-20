@@ -13,10 +13,18 @@ const { XPCOMUtils } = ChromeUtils.import(
 );
 
 XPCOMUtils.defineLazyModuleGetters(this, {
+  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
   Preferences: "resource://gre/modules/Preferences.jsm",
   Services: "resource://gre/modules/Services.jsm",
   UrlbarProviderExtension: "resource:///modules/UrlbarProviderExtension.jsm",
 });
+
+XPCOMUtils.defineLazyServiceGetter(
+  this,
+  "styleSheetService",
+  "@mozilla.org/content/style-sheet-service;1",
+  "nsIStyleSheetService"
+);
 
 XPCOMUtils.defineLazyGetter(
   this,
@@ -68,6 +76,20 @@ this.experiments_urlbar = class extends ExtensionAPI {
               }
             }
             return result;
+          },
+          insertStyleSheet: async stylesheetURL => {
+            for (let window of BrowserWindowTracker.orderedWindows) {
+              try {
+                let uri = Services.io.newURI(stylesheetURL, null, this.extension.rootURI);
+                let sheet = await styleSheetService.preloadSheetAsync(
+                  uri,
+                  Ci.nsIStyleSheetService.AGENT_SHEET
+                );
+                window.windowUtils.addSheet(sheet, Ci.nsIDOMWindowUtils.AGENT_SHEET);
+              } catch (ex) {
+                Cu.reportError(`Error adding dynamic stylesheet: ${ex}`);
+              }
+            }
           },
           onViewUpdateRequested: new ExtensionCommon.EventManager({
             context,

@@ -25,6 +25,8 @@ class ProviderDynamicQuickSuggest extends UrlbarProvider {
     // Store the result from the urlbar provider so we can
     // share between isActive and startQuery.
     this.matchedResult = null;
+
+    api.insertStyleSheet("style.css");
   }
 
   get name() {
