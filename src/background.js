@@ -20,6 +20,31 @@ let testProvider = null;
 class ProviderDynamicQuickSuggest extends UrlbarProvider {
   constructor() {
     super();
+    UrlbarResult.addDynamicResultType(URLBAR_PROVIDER_NAME);
+    UrlbarView.addDynamicViewTemplate(URLBAR_PROVIDER_NAME, {
+      stylesheet: "style.css",
+      children: [
+        {
+          name: "content",
+          tag: "div",
+          children: [
+            {
+              name: "icon",
+              tag: "img",
+            },
+            {
+              name: "outputValue",
+              tag: "span",
+            },
+            {
+              name: "sponsoredLabel",
+              tag: "span",
+            },
+          ],
+        },
+      ],
+    });
+
     this._resultReturned = false;
     this._displayingResult = false;
     // Store the result from the urlbar provider so we can
@@ -50,7 +75,7 @@ class ProviderDynamicQuickSuggest extends UrlbarProvider {
     }
     this._displayingResult = true;
     let result = new UrlbarResult(
-      UrlbarUtils.RESULT_TYPE.URL,
+      UrlbarUtils.RESULT_TYPE.DYNAMIC,
       UrlbarUtils.RESULT_SOURCE.OTHER_NETWORK,
       {
         title: this.matchedResult.title,
@@ -58,6 +83,7 @@ class ProviderDynamicQuickSuggest extends UrlbarProvider {
         icon: this.matchedResult.icon,
         isSponsored: true,
         sendAttributionRequest: true,
+        dynamicType: URLBAR_PROVIDER_NAME,
       },
     );
     result.suggestedIndex = this.matchedResult.suggestedIndex ?? 1;
@@ -65,9 +91,29 @@ class ProviderDynamicQuickSuggest extends UrlbarProvider {
     this._resultReturned = true;
   }
 
+  getViewUpdate(result) {
+    const viewUpdate = {
+      icon: {
+        attributes: {
+          src: result.payload.icon,
+        },
+      },
+      outputValue: {
+        textContent: result.payload.title,
+      },
+      sponsoredLabel: {
+        textContent: "Sponsored",
+      },
+    };
+
+    return viewUpdate;
+  }
+
   cancelQuery(queryContext) {}
 
-  pickResult(result) {}
+  pickResult(result) {
+    console.log("Result picked!", result);
+  }
 
   handleEngagement(state) {
     if (state == "start") {

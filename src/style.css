@@ -1,0 +1,36 @@
+.urlbarView-dynamic-ProviderDynamicQuickSuggest-content {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: end;
+  justify-content: start;
+}
+
+.urlbarView-dynamic-ProviderDynamicQuickSuggest-content[selected] {
+  background-color: var(--autocomplete-popup-highlight-background);
+  color: var(--autocomplete-popup-highlight-color);
+}
+
+.urlbarView-row[dynamicType=ProviderDynamicQuickSuggest] .urlbarView-row-inner:hover {
+  background: var(--arrowpanel-dimmed);
+}
+
+.urlbarView-dynamic-ProviderDynamicQuickSuggest-icon {
+  min-width: 16px;
+  height: 16px;
+  margin-inline-end: calc((6px + 2px));
+  background-repeat: no-repeat;
+  background-size: contain;
+  -moz-context-properties: fill, fill-opacity;
+}
+
+.urlbarView-dynamic-ProviderDynamicQuickSuggest-sponsoredLabel::before {
+  content: "\2014";
+  margin: 0 .4em;
+  opacity: 0.6;
+}
+
+.urlbarView-dynamic-ProviderDynamicQuickSuggest-sponsoredLabel {
+  font-size: .85em;
+  color: unset;
+  opacity: .6;
+}
